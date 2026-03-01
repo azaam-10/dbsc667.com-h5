@@ -1,4 +1,4 @@
-import { useState, ReactNode, ChangeEvent } from 'react';
+import { useState, ReactNode, ChangeEvent, useEffect } from 'react';
 import { 
   Bell, 
   Share2, 
@@ -24,6 +24,14 @@ type Tab = 'home' | 'grid' | 'orders' | 'support' | 'profile' | 'withdraw' | 'no
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('profile');
   const [homeBlocked, setHomeBlocked] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleHomeClick = () => {
     setHomeBlocked(true);
@@ -34,6 +42,25 @@ export default function App() {
 
   return (
     <div className="w-full max-w-md mx-auto min-h-screen flex flex-col bg-[#87b1e0] relative">
+      {isInitialLoading && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/5">
+          <div className="bg-[#333333]/90 w-32 h-32 rounded-2xl flex items-center justify-center shadow-2xl">
+            <div className="relative w-10 h-10">
+              {[...Array(12)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute left-[18.5px] top-0 w-[3px] h-[10px] bg-white rounded-full animate-spinner-fade"
+                  style={{
+                    transform: `rotate(${i * 30}deg)`,
+                    transformOrigin: '1.5px 20px',
+                    animationDelay: `${-1.1 + i * 0.1}s`
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       {activeTab === 'profile' && <ProfilePage onNavigate={setActiveTab} />}
       {activeTab === 'orders' && <OrdersPage onNavigate={setActiveTab} />}
       {activeTab === 'support' && <SupportPage onNavigate={setActiveTab} />}

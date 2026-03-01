@@ -2,6 +2,12 @@
 
 @theme {
   --font-sans: "Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif";
+  --animate-spinner-fade: spinner-fade 1.2s linear infinite;
+
+  @keyframes spinner-fade {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
 }
 
 body {
